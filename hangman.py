@@ -1,4 +1,6 @@
 import random
+from rich import print as rprint
+from rich.text import Text
 
 with open('words.txt', 'r') as file:
     words = file.read().split("\n")
@@ -13,7 +15,7 @@ to_print = []
 def showAttempts(correct_letters):
 	for letter in secret_word:
 		if letter in correct_letters:
-			print(letter + ' ', end = '')
+			rprint(f"[green]{letter} [/green]", end = '')
 			to_print.append(letter)
 		else:
 			print('_ ', end = '')
@@ -35,13 +37,19 @@ while True:
 			unsuccessful_attempts += 1
 		showAttempts(correct_letters)
 
-	print("\nAlready guessed: " + " ".join(incorrect_letters))
+	text = Text()
+	for letter in incorrect_letters:
+		text.append(f"{letter} ", style="red")
+
+	print("\nAlready guessed: ")
+
+	rprint(text)
 
 	if unsuccessful_attempts == 6:
 		print(f"You are out of guesses\nThe word was {secret_word}")
 		break
 	elif  '_' not in to_print:
-		print("You guessed correctly. You win!!")
+		rprint("You guessed correctly. You win!! :tada: :tada:")
 		break
 
 input()
